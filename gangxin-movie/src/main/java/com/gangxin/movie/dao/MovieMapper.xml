@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gangxin.movie.dao.MovieMapper">
+
+	<select id="list" resultType="com.gangxin.movie.domain.Movie">
+		select * from t_movie
+		<where>
+			<if test="name != null and name != ''">
+				name like "%"#{name}"%"
+			</if>
+			<if test="actor != null and actor != ''">
+				and actor like "%"#{actor}"%"
+			</if>
+			<if test="year != null and year != '' ">
+				and year = #{year}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				and uptime >= #{startDate}
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				and uptime &lt;= #{endDate}
+			</if>
+		</where>
+		<if test="orderField!=null and orderField!=''">
+			order by ${orderField} ${orderMethod}
+		</if>
+
+	</select>
+	
+	<delete id="deleteBatch">
+	  delete from t_movie where id in
+	  <foreach collection="array" separator="," open="(" close=")" item="ids">
+	   #{ids}
+	  </foreach>
+	
+	</delete>
+	
+	<update id="update">
+	  update t_movie set status=#{status} where id=#{id}
+	
+	</update>
+
+
+</mapper>
